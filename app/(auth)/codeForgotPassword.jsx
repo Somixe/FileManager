@@ -2,6 +2,10 @@ import { Ionicons } from '@expo/vector-icons'; // Pour les icônes
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+
+
+//user textContentType="oneTimeCode"
+
 export default function codeForgotPassword() {
     const router = useRouter();
     const {email} = useLocalSearchParams();
@@ -9,19 +13,18 @@ export default function codeForgotPassword() {
     return (
     <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.container}>
-
             <View style={styles.headerContainer}>
-                {/* Flèche en haut à gauche */}
-                <View>
-                    <Ionicons 
-                    name="arrow-back-outline" 
-                    size={30} 
-                    color="black" 
-                    onPress={() => router.back()} 
-                    />
-                </View>
+              {/* Flèche en haut à gauche */}
+              <View>
+                  <Ionicons 
+                  name="arrow-back-outline" 
+                  size={30} 
+                  color="black" 
+                  onPress={() => router.back()} 
+                  />
+              </View>
 
-            <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
+              <Image source={require('../../assets/images/logo.png')} style={styles.logo} />
             </View>
 
             <Text style={styles.title}>Enter OTP</Text>
