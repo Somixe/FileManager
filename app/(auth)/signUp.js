@@ -12,16 +12,44 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
+import PasswordSignUp from '../../components/password/PasswordSignUp';
 import { shadowStyle } from '../../components/shadow';
 
 
 
 export default function SignUp() {
   const router = useRouter();
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const [noSpaceText, setNoSpaceText] = useState('');
 
+  const checkPasswordCriteria = (pwd) => {
+    return {
+      minimum: pwd.length === 0,
+      length: pwd.length >= 8,
+      lowercase: /[a-z]/.test(pwd),  
+      uppercase: /[A-Z]/.test(pwd),  
+      number: /\d/.test(pwd),
+      special: /[!@#$%^&*(),.?":{}|<>']/.test(pwd),
+    };
+  };
+  
+  const getStrength = (criteria) => {
+    // Exige longueur + minuscule + ajuscule
+    if (criteria.minimum) return 0; //Couleur rouge 
+  
+    let score = 0;
+  
+    if (criteria.length) score += 0.30;
+    if (criteria.lowercase) score += 0.15;
+    if (criteria.uppercase) score += 0.15;
+    if (criteria.number) score += 0.175;
+    if (criteria.special) score += 0.175;
+  
+    return score;
+  };
+
+  const criteria = checkPasswordCriteria(password);
+  const strength = getStrength(criteria);
 
   return (
     <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
@@ -52,18 +80,23 @@ export default function SignUp() {
                 spellCheck={false}      // Désactive la vérification orthographique
               />
             </View>
-              <PasswordStrengthMeter showPassword={showPassword} setShowPassword={setShowPassword} noSpaceText={noSpaceText} setNoSpaceText={setNoSpaceText}/>
+              <PasswordSignUp
+                password={password}
+                setPassword={setPassword}
+                showPassword={showPassword}
+                setShowPassword={setShowPassword} 
+                criteria={criteria}
+                strength={strength}/>
             <View>
               <Text style={styles.inputText}>Confirm Password</Text>
               <TextInput
                 style={styles.input}
                 secureTextEntry={showPassword}
-                value={noSpaceText}
-                onChangeText={ (text) => {
+                value={password}
+                onChangeText={(text) => {
                   const noSpaces = text.replace(/\s/g, '');
-                  setNoSpaceText(noSpaces);
-                }}    
-              />
+                  setPassword(noSpaces);
+                }}/>
             </View>
           </View>
           <View style={styles.bottom}>
@@ -209,10 +242,4 @@ const styles = StyleSheet.create({
     fontWeight:'regular',
     fontFamily: 'Gabarito',
   },
-  toolTip: {
-    fontWeight:'regular',
-    fontFamily: 'Gabarito',
-    fontSize:15,
-    color: '#274a65ff',
-  }
 });
