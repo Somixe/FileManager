@@ -1,4 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -20,8 +19,9 @@ import { shadowStyle } from '../../components/shadow';
 export default function SignUp() {
   const router = useRouter();
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-
+  
   const checkPasswordCriteria = (pwd) => {
     return {
       minimum: pwd.length === 0,
@@ -54,13 +54,11 @@ export default function SignUp() {
   return (
     <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
       <ScrollView style={styles.root}>
-        <View style={styles.loginIconContainer}>
-            <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
+        <View style={styles.iconContainer}>
             <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
         </View>
         <View style={styles.container}>
-
-          <View >
+          <View>
             <Text style={styles.labelText}>Sign up</Text>
           </View>
           <View style={styles.inputContainer}>
@@ -80,7 +78,7 @@ export default function SignUp() {
                 spellCheck={false}      // Désactive la vérification orthographique
               />
             </View>
-              <PasswordSignUp
+            <PasswordSignUp
                 password={password}
                 setPassword={setPassword}
                 showPassword={showPassword}
@@ -92,10 +90,10 @@ export default function SignUp() {
               <TextInput
                 style={styles.input}
                 secureTextEntry={showPassword}
-                value={password}
+                value={confirmPassword}
                 onChangeText={(text) => {
                   const noSpaces = text.replace(/\s/g, '');
-                  setPassword(noSpaces);
+                  setConfirmPassword(noSpaces);
                 }}/>
             </View>
           </View>
@@ -113,7 +111,7 @@ export default function SignUp() {
             </TouchableOpacity>
             <View style={styles.loginContainer}>
               <Text style={styles.questionText}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => {router.back(); router.push('./login');}}>
+              <TouchableOpacity onPress={() => {router.replace('./login');}}>
                 <Text style={styles.loginText}>Log in</Text>
               </TouchableOpacity>
             </View>
@@ -130,11 +128,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EACCA7',
   },
-  loginIconContainer: {
-    flexDirection:'row',
+  iconContainer: {
     alignItems:'center',
-    justifyContent:'start',
-    gap:110,
+    justifyContent:'center',
     height:145,
     marginTop:60,
   },
@@ -236,6 +232,7 @@ const styles = StyleSheet.create({
     color: "rgba(96,100,109,70)",
     fontWeight:'regular',
     fontFamily: 'Gabarito',
+    fontSize:15,
   },
   loginText: {
     color: 'rgba(10,122,255,70)',

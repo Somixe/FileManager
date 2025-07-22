@@ -1,5 +1,4 @@
 import { useRouter } from 'expo-router';
-import React from 'react';
 import {
   Image,
   ScrollView,
@@ -15,13 +14,13 @@ export default function IndexScreen() {
       <ScrollView contentContainerStyle={styles.container}>
         <Text style={styles.welcomeText}>Welcome!</Text>
         <Image source={require('../../assets/images/welcome.png')} />
-        <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('./signUp')}>
-          <Text style={styles.signUpText}>Sign up</Text>
+        <TouchableOpacity style={styles.signUpButton} onPress={() => router.replace('./login')}>
+          <Text style={styles.loginText}>Log in</Text>
         </TouchableOpacity>
         <View style={styles.loginContainer}>
           <Text style={styles.questionText}>Already have an account?</Text>
-          <TouchableOpacity onPress={() => router.push('./login')}>
-            <Text style={styles.loginText}>Log in</Text>
+          <TouchableOpacity onPress={() => router.replace('./signUp')}>
+            <Text style={styles.signUpText}>Sign up</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         ...shadowStyle,
   },
-  signUpText: {
+  loginText: {
     color:'white',
     fontFamily:'Gabarito',
     fontWeight:'medium',
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     fontWeight:'regular',
     fontFamily: 'Gabarito',
   },
-  loginText: {
+  signUpText: {
     color: 'rgba(10,122,255,70)',
     fontWeight:'regular',
     fontFamily: 'Gabarito',
