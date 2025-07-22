@@ -12,20 +12,20 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import PasswordStrengthMeter from '../../components/PasswordStrengthMeter';
+import PasswordLogin from '../../components/password/PasswordLogin';
 import { shadowStyle } from '../../components/shadow';
 
 
 
 export default function Login() {
   const router = useRouter();
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  const [noSpaceText, setNoSpaceText] = useState('');
 
 
   return (
     <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
-      <ScrollView style={styles.root}>
+      <ScrollView scrollEventThrottle={16} style={styles.root}>
         <View style={styles.loginIconContainer}>
             <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
             <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
@@ -45,11 +45,15 @@ export default function Login() {
                 spellCheck={false}      // Désactive la vérification orthographique
               />
             </View>
-              <PasswordStrengthMeter showPassword={showPassword} setShowPassword={setShowPassword} noSpaceText={noSpaceText} setNoSpaceText={setNoSpaceText}/>
+            <PasswordLogin
+              password={password}
+              setPassword={setPassword}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}/>
           </View>
           <View style={styles.bottom}>
             <TouchableOpacity style={styles.signUpButton} onPress={() => console.log('Confirm Sign up!')}>
-              <Text style={styles.signUpText}>Confirm</Text>
+              <Text style={styles.signUpText}>Connect</Text>
             </TouchableOpacity>
 
             <Text style={styles.orText}>OR</Text>
@@ -60,9 +64,9 @@ export default function Login() {
               />
             </TouchableOpacity>
             <View style={styles.loginContainer}>
-              <Text style={styles.questionText}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => {router.back(); router.push('./login');}}>
-                <Text style={styles.loginText}>Log in</Text>
+              <Text style={styles.questionText}>Don’t have an account yet?</Text>
+              <TouchableOpacity onPress={() => {router.back(); router.push('./signUp');}}>
+                <Text style={styles.loginText}>Sign up</Text>
               </TouchableOpacity>
             </View>
           </View>
