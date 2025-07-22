@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+import { Ionicons } from '@expo/vector-icons';
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -19,9 +23,14 @@ import { shadowStyle } from '../../components/shadow';
 export default function SignUp() {
   const router = useRouter();
   const [password, setPassword] = useState('');
+<<<<<<< HEAD
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
   
+=======
+  const [showPassword, setShowPassword] = useState(true);
+
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
   const checkPasswordCriteria = (pwd) => {
     return {
       minimum: pwd.length === 0,
@@ -54,11 +63,21 @@ export default function SignUp() {
   return (
     <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
       <ScrollView style={styles.root}>
+<<<<<<< HEAD
         <View style={styles.iconContainer}>
             <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
         </View>
         <View style={styles.container}>
           <View>
+=======
+        <View style={styles.loginIconContainer}>
+            <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
+            <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
+        </View>
+        <View style={styles.container}>
+
+          <View >
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
             <Text style={styles.labelText}>Sign up</Text>
           </View>
           <View style={styles.inputContainer}>
@@ -78,7 +97,11 @@ export default function SignUp() {
                 spellCheck={false}      // Désactive la vérification orthographique
               />
             </View>
+<<<<<<< HEAD
             <PasswordSignUp
+=======
+              <PasswordSignUp
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
                 password={password}
                 setPassword={setPassword}
                 showPassword={showPassword}
@@ -90,10 +113,17 @@ export default function SignUp() {
               <TextInput
                 style={styles.input}
                 secureTextEntry={showPassword}
+<<<<<<< HEAD
                 value={confirmPassword}
                 onChangeText={(text) => {
                   const noSpaces = text.replace(/\s/g, '');
                   setConfirmPassword(noSpaces);
+=======
+                value={password}
+                onChangeText={(text) => {
+                  const noSpaces = text.replace(/\s/g, '');
+                  setPassword(noSpaces);
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
                 }}/>
             </View>
           </View>
@@ -111,7 +141,11 @@ export default function SignUp() {
             </TouchableOpacity>
             <View style={styles.loginContainer}>
               <Text style={styles.questionText}>Already have an account?</Text>
+<<<<<<< HEAD
               <TouchableOpacity onPress={() => {router.replace('./login');}}>
+=======
+              <TouchableOpacity onPress={() => {router.back(); router.push('./login');}}>
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
                 <Text style={styles.loginText}>Log in</Text>
               </TouchableOpacity>
             </View>
@@ -128,9 +162,17 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EACCA7',
   },
+<<<<<<< HEAD
   iconContainer: {
     alignItems:'center',
     justifyContent:'center',
+=======
+  loginIconContainer: {
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'start',
+    gap:110,
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
     height:145,
     marginTop:60,
   },
@@ -232,7 +274,10 @@ const styles = StyleSheet.create({
     color: "rgba(96,100,109,70)",
     fontWeight:'regular',
     fontFamily: 'Gabarito',
+<<<<<<< HEAD
     fontSize:15,
+=======
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
   },
   loginText: {
     color: 'rgba(10,122,255,70)',

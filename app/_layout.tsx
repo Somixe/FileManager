@@ -6,7 +6,10 @@ import 'react-native-reanimated';
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
     Gabarito: require('../assets/fonts/Gabarito.ttf'),
+<<<<<<< HEAD
     Freeman: require('../assets/fonts/Freeman-Regular.ttf')
+=======
+>>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
   });
 
   if (!fontsLoaded){
