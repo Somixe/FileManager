@@ -1,28 +1,41 @@
-import { useRouter } from 'expo-router';
+import { useRouter } from 'expo-router'; //Pour pouvoir naviguer entre les pages d'authentification
 import {
   Image,
   ScrollView,
   StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import { shadowStyle } from '../../components/shadow';
+import { shadowStyle } from '../../components/shadow'; // Style d'ombre réutilisable
 
 export default function IndexScreen() {
   const router = useRouter();
 
-  return (
+return (
     <View style={styles.root}>
+      {/* ScrollView permet de faire défiler le contenu si l'écran est petit */}
       <ScrollView contentContainerStyle={styles.container}>
+
+        {/* Titre de bienvenue */}
         <Text style={styles.welcomeText}>Welcome!</Text>
+
+        {/* Illustration d'accueil */}
         <Image source={require('../../assets/images/welcome.png')} />
-        <TouchableOpacity style={styles.signUpButton} onPress={() => router.replace('./login')}>
+
+        {/* Bouton de connexion - remplace la page actuelle par 'login' */}
+        <TouchableOpacity 
+          style={styles.signUpButton} 
+          onPress={() => router.replace('./login')}
+        >
           <Text style={styles.loginText}>Log in</Text>
         </TouchableOpacity>
+
+        {/* Lien vers la page d'inscription */}
         <View style={styles.loginContainer}>
           <Text style={styles.questionText}>Already have an account?</Text>
           <TouchableOpacity onPress={() => router.replace('./signUp')}>
             <Text style={styles.signUpText}>Sign up</Text>
           </TouchableOpacity>
         </View>
+
       </ScrollView>
     </View>
   );

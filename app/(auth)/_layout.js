@@ -3,6 +3,7 @@ import { Stack } from 'expo-router';
 export default function Layout() {
   return (
     <>
+      {/* Déclaration de la pile de navigation pour les écrans d'authentification */}
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false}} />
         <Stack.Screen name="signUp" options={{ headerShown: false, animation: "none" }} />

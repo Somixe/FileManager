@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; // Icône flèche de retour
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -12,71 +12,110 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { shadowStyle } from '../../components/shadow';
-
+import { shadowStyle } from '../../components/shadow'; // Styles d'ombre personnalisés
 
 export default function forgotPassword() {
   const router = useRouter();
   const [email, setEmail] = useState('');
 
+  /**
+   * Vérifie la validité de l'e-mail au moment de la soumission
+   * - Vérifie que le champ n'est pas vide
+   * - Vérifie que l'e-mail respecte un format classique
+   * - (À ajouter : vérifier que l'e-mail existe dans la base de données)
+   */
   const checkEmailOnSubmit = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    /*if (!email) {
+
+    /* À activer en prod :
+    if (!email) {
       alert('Email is required');
       return;
     }
 
-    if (!emailRegex.test(email)){
-      alert('Invalid Email')
+    if (!emailRegex.test(email)) {
+      alert('Invalid Email');
       return;
-    }*/                     //A ACTIVER !!!!!!!
+    }
+    */
 
-    //Rajouter une autre alert dans le cas, ou l'email passé n'est pas dans la BDD
+    // TODO : Ajouter une vérification côté backend pour s'assurer que l'e-mail existe
 
+    // Redirection vers l'étape suivante avec l'e-mail en paramètre
     router.push({
-      pathname:'codeForgotPassword',
-      params: {email: email},
+      pathname: 'codeForgotPassword',
+      params: { email: email },
     });
   };
 
   return (
-    <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
+    // Ferme le clavier lorsqu'on appuie en dehors des champs
+    <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
       <ScrollView scrollEventThrottle={16} style={styles.root}>
-        <View style={styles.loginIconContainer}>
-            <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
-            <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
-        </View>
-        <View style={styles.container}>
 
-          <View >
-            <Text style={styles.labelText}>Forgot your {'\n'} password?</Text>
-          </View>
+        {/* Logo + flèche de retour */}
+        <View style={styles.loginIconContainer}>
+          <Ionicons
+            name="arrow-back-outline"
+            size={30}
+            color="black"
+            style={{ marginBottom: 90, marginLeft: 15 }}
+            onPress={() => router.back()}
+          />
+          <Image 
+            source={require('../../assets/images/login.png')} 
+            style={styles.loginIcon} 
+          />
+        </View>
+
+        <View style={styles.container}>
+          
+          {/* Titre principal */}
           <View>
-            <Text style={styles.noWorriesText}>No worries! It happens. Please {'\n'}enter your account email address.</Text>
+            <Text style={styles.labelText}>
+              Forgot your {'\n'} password?
+            </Text>
           </View>
+
+          {/* Texte explicatif */}
+          <View>
+            <Text style={styles.noWorriesText}>
+              No worries! It happens. Please {'\n'}
+              enter your account email address.
+            </Text>
+          </View>
+
+          {/* Champ e-mail */}
           <View style={styles.inputContainer}>
             <View style={styles.emailContainer}>
               <Text style={styles.inputText}>Email</Text>
               <TextInput
                 style={styles.input}
-                keyboardType='email-address'
-                autoCorrect={false}     // Désactive la correction automatique
-                spellCheck={false}      // Désactive la vérification orthographique
+                keyboardType="email-address"
+                autoCorrect={false}
+                spellCheck={false}
                 value={email}
                 onChangeText={setEmail}
               />
             </View>
           </View>
+
+          {/* Bouton de soumission */}
           <View style={styles.bottom}>
-            <TouchableOpacity style={styles.submitButton} onPress={checkEmailOnSubmit}>
+            <TouchableOpacity 
+              style={styles.submitButton} 
+              onPress={checkEmailOnSubmit}
+            >
               <Text style={styles.submitText}>Continue</Text>
             </TouchableOpacity>
           </View>
+
         </View>
       </ScrollView>
-    </Pressable >
+    </Pressable>
   );
 }
+
 
 const styles = StyleSheet.create({
   root: {

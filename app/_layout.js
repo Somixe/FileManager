@@ -1,24 +1,26 @@
+// Ce fichier définit la structure principale de l'application avec une navigation par pile (Stack)
+// et charge les polices personnalisées avant de rendre l'interface.
+
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
 export default function RootLayout() {
+  // Chargement des polices personnalisées (bloque le rendu tant qu'elles ne sont pas prêtes)
   const [fontsLoaded] = useFonts({
     Gabarito: require('../assets/fonts/Gabarito.ttf'),
-<<<<<<< HEAD
     Freeman: require('../assets/fonts/Freeman-Regular.ttf')
-=======
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
   });
 
-  if (!fontsLoaded){
-    return null;
+  if (!fontsLoaded) {
+    return null; // Empêche l'affichage prématuré de l'interface sans les bonnes polices
   }
 
   return (
     <>
-      <StatusBar style="dark" translucent={false} />
+      <StatusBar style="dark" />
+      {/* Configuration de la pile de navigation principale */}
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack>
