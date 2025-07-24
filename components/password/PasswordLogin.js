@@ -1,25 +1,32 @@
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-
-const PasswordLogin = ({password, setPassword, showPassword, setShowPassword}) => {
-
+const PasswordLogin = ({ password, setPassword, showPassword, setShowPassword }) => {
   return (
     <View style={styles.container}>
       
+      {/* Ligne du label "Password" avec l'icône pour afficher/masquer le mot de passe */}
       <View style={styles.passwordContainer}>
         <Text style={styles.inputText}>Password</Text>
+
         <View style={styles.iconContainer}>
+          {/* Bouton pour basculer entre afficher/masquer le mot de passe */}
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons name={showPassword ? "eye-off" : "eye"} size={20} color="rgba(96,100,109,0.7)" style={{ paddingTop: 8, marginRight: 8 }}/>
+            <Ionicons 
+              name={showPassword ? "eye-off" : "eye"} 
+              size={20} 
+              color="rgba(96,100,109,0.7)" 
+              style={{ paddingTop: 8, marginRight: 8 }}
+            />
           </TouchableOpacity>
         </View>
       </View>
+
+      {/* Champ de saisie du mot de passe */}
       <View style={styles.inputView}>
         <TextInput
           style={styles.input}
-          secureTextEntry={showPassword}
+          secureTextEntry={showPassword} // Masque ou affiche le texte selon showPassword
           value={password}
           onChangeText={(text) => {
+            // Enlève les espaces du texte saisi avant de le stocker
             const noSpaces = text.replace(/\s/g, '');
             setPassword(noSpaces);
           }}

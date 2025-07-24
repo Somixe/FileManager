@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-import { Ionicons } from '@expo/vector-icons';
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -15,45 +11,46 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import PasswordSignUp from '../../components/password/PasswordSignUp';
+
+import PasswordSignUp from '../../components/password/PasswordSignUp'; // Champ mot de passe avec force visuelle
 import { shadowStyle } from '../../components/shadow';
-
-
 
 export default function SignUp() {
   const router = useRouter();
+
+  // États pour les champs du formulaire
   const [password, setPassword] = useState('');
-<<<<<<< HEAD
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
-  
-=======
-  const [showPassword, setShowPassword] = useState(true);
 
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
+  /**
+   * Vérifie les critères de robustesse du mot de passe
+   * (longueur, majuscule, chiffre, caractère spécial, etc.)
+   */
   const checkPasswordCriteria = (pwd) => {
     return {
-      minimum: pwd.length === 0,
+      minimum: pwd.length === 0, // utilisé pour détecter un champ vide
       length: pwd.length >= 8,
-      lowercase: /[a-z]/.test(pwd),  
-      uppercase: /[A-Z]/.test(pwd),  
+      lowercase: /[a-z]/.test(pwd),
+      uppercase: /[A-Z]/.test(pwd),
       number: /\d/.test(pwd),
       special: /[!@#$%^&*(),.?":{}|<>']/.test(pwd),
     };
   };
-  
+
+  /**
+   * Calcule un "score" de force du mot de passe
+   * Utilisé pour afficher une jauge visuelle dans le composant PasswordSignUp
+   */
   const getStrength = (criteria) => {
-    // Exige longueur + minuscule + ajuscule
-    if (criteria.minimum) return 0; //Couleur rouge 
-  
+    if (criteria.minimum) return 0; // Rouge = gris
     let score = 0;
-  
     if (criteria.length) score += 0.30;
     if (criteria.lowercase) score += 0.15;
     if (criteria.uppercase) score += 0.15;
     if (criteria.number) score += 0.175;
     if (criteria.special) score += 0.175;
-  
+
     return score;
   };
 
@@ -61,99 +58,108 @@ export default function SignUp() {
   const strength = getStrength(criteria);
 
   return (
-    <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
+    // Permet de fermer le clavier en appuyant en dehors des champs
+    <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
       <ScrollView style={styles.root}>
-<<<<<<< HEAD
+        
+        {/* Logo en haut de l'écran */}
         <View style={styles.iconContainer}>
-            <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
+          <Image 
+            source={require('../../assets/images/login.png')} 
+            style={styles.loginIcon}
+          />
         </View>
-        <View style={styles.container}>
-          <View>
-=======
-        <View style={styles.loginIconContainer}>
-            <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
-            <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
-        </View>
-        <View style={styles.container}>
 
-          <View >
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
-            <Text style={styles.labelText}>Sign up</Text>
-          </View>
+        <View style={styles.container}>
+          
+          {/* Titre de la page */}
+          <Text style={styles.labelText}>Sign up</Text>
+
           <View style={styles.inputContainer}>
+
+            {/* Nom complet */}
             <View>
               <Text style={styles.inputText}>Full Name</Text>
               <TextInput
                 style={styles.input}
-                autoCorrect={false}    
-                spellCheck={false}/>
+                autoCorrect={false} // Désactive la correction automatique
+                spellCheck={false} // Désactive la vérification orthographique (les vagues rouges)
+              />
             </View>
+
+            {/* Email */}
             <View>
               <Text style={styles.inputText}>Email</Text>
               <TextInput
                 style={styles.input}
-                keyboardType='email-address'
-                autoCorrect={false}     // Désactive la correction automatique
-                spellCheck={false}      // Désactive la vérification orthographique
+                keyboardType="email-address" 
+                autoCorrect={false}
+                spellCheck={false}
               />
             </View>
-<<<<<<< HEAD
+
+            {/* Mot de passe : champ réutilisable avec jauge de force */}
             <PasswordSignUp
-=======
-              <PasswordSignUp
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
-                password={password}
-                setPassword={setPassword}
-                showPassword={showPassword}
-                setShowPassword={setShowPassword} 
-                criteria={criteria}
-                strength={strength}/>
+              password={password}
+              setPassword={setPassword}
+              showPassword={showPassword}
+              setShowPassword={setShowPassword}
+              criteria={criteria}
+              strength={strength}
+            />
+
+            {/* Confirmation du mot de passe */}
             <View>
               <Text style={styles.inputText}>Confirm Password</Text>
               <TextInput
                 style={styles.input}
                 secureTextEntry={showPassword}
-<<<<<<< HEAD
                 value={confirmPassword}
-                onChangeText={(text) => {
+                onChangeText={(text) => { //Enlève la possibilité d'ajouter des espaces
                   const noSpaces = text.replace(/\s/g, '');
                   setConfirmPassword(noSpaces);
-=======
-                value={password}
-                onChangeText={(text) => {
-                  const noSpaces = text.replace(/\s/g, '');
-                  setPassword(noSpaces);
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
-                }}/>
+                }}
+              />
             </View>
+
           </View>
+
+          {/* Bas de formulaire : bouton de validation + Google + redirection */}
           <View style={styles.bottom}>
-            <TouchableOpacity style={styles.signUpButton} onPress={() => console.log('Confirm Sign up!')}>
+
+            {/* Bouton de validation (non relié encore à une logique) */}
+            <TouchableOpacity 
+              style={styles.signUpButton} 
+              onPress={() => console.log('Confirm Sign up!')}
+            >
               <Text style={styles.signUpText}>Confirm</Text>
             </TouchableOpacity>
 
             <Text style={styles.orText}>OR</Text>
-            <TouchableOpacity style={styles.googleButton} onPress={() => console.log('Login with Google')}>
+
+            {/* Connexion via Google */}
+            <TouchableOpacity 
+              style={styles.googleButton} 
+              onPress={() => console.log('Login with Google')}
+            >
               <Image
                 source={require('../../assets/images/logoGoogle.png')}
                 style={styles.googleIcon}
               />
             </TouchableOpacity>
+
+            {/* Lien vers la page de connexion */}
             <View style={styles.loginContainer}>
               <Text style={styles.questionText}>Already have an account?</Text>
-<<<<<<< HEAD
-              <TouchableOpacity onPress={() => {router.replace('./login');}}>
-=======
-              <TouchableOpacity onPress={() => {router.back(); router.push('./login');}}>
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
+              <TouchableOpacity onPress={() => router.replace('./login')}>
                 <Text style={styles.loginText}>Log in</Text>
               </TouchableOpacity>
             </View>
-          </View>
 
+          </View>
         </View>
       </ScrollView>
-    </Pressable >
+    </Pressable>
   );
 }
 
@@ -162,17 +168,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EACCA7',
   },
-<<<<<<< HEAD
   iconContainer: {
     alignItems:'center',
     justifyContent:'center',
-=======
-  loginIconContainer: {
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'start',
-    gap:110,
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
     height:145,
     marginTop:60,
   },
@@ -274,10 +272,7 @@ const styles = StyleSheet.create({
     color: "rgba(96,100,109,70)",
     fontWeight:'regular',
     fontFamily: 'Gabarito',
-<<<<<<< HEAD
     fontSize:15,
-=======
->>>>>>> ced0e7bf4425a9c854b2a96da8f9ac05db4d2fe8
   },
   loginText: {
     color: 'rgba(10,122,255,70)',

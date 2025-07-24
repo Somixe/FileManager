@@ -15,84 +15,108 @@ import {
 import PasswordSignUp from '../../components/password/PasswordSignUp';
 import { shadowStyle } from '../../components/shadow';
 
-
-export default function forgotPassword() {
+export default function ResetPassword() {
+  // Hook pour gérer la navigation entre les pages
   const router = useRouter();
+
+  // États pour gérer la saisie des mots de passe
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [showPassword, setShowPassword] = useState(true); // Contrôle l'affichage du mot de passe (masqué ou visible)
   
+  // Fonction qui vérifie les critères de sécurité du mot de passe
   const checkPasswordCriteria = (pwd) => {
     return {
-      minimum: pwd.length === 0,
-      length: pwd.length >= 8,
-      lowercase: /[a-z]/.test(pwd),  
-      uppercase: /[A-Z]/.test(pwd),  
-      number: /\d/.test(pwd),
-      special: /[!@#$%^&*(),.?":{}|<>']/.test(pwd),
+      minimum: pwd.length === 0,           // Mot de passe vide
+      length: pwd.length >= 8,             // Au moins 8 caractères
+      lowercase: /[a-z]/.test(pwd),        // Contient une lettre minuscule
+      uppercase: /[A-Z]/.test(pwd),        // Contient une lettre majuscule
+      number: /\d/.test(pwd),               // Contient un chiffre
+      special: /[!@#$%^&*(),.?":{}|<>']/.test(pwd), // Contient un caractère spécial
     };
   };
   
+  // Fonction qui calcule la "force" du mot de passe selon les critères validés
   const getStrength = (criteria) => {
-    // Exige longueur + minuscule + ajuscule
-    if (criteria.minimum) return 0; //Couleur rouge 
-  
+    if (criteria.minimum) return 0; // Si vide, force = 0 (rouge)
+
     let score = 0;
-  
     if (criteria.length) score += 0.30;
     if (criteria.lowercase) score += 0.15;
     if (criteria.uppercase) score += 0.15;
     if (criteria.number) score += 0.175;
     if (criteria.special) score += 0.175;
-  
-    return score;
+
+    return score; // Score entre 0 et 1 pour indiquer la qualité du mot de passe
   };
 
+  // On calcule les critères et la force à chaque rendu
   const criteria = checkPasswordCriteria(password);
   const strength = getStrength(criteria);
 
   return (
-    <Pressable  onPress={Keyboard.dismiss} style={{flex:1}}>
+    <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
       <ScrollView scrollEventThrottle={16} style={styles.root}>
+        {/* Icone de retour + logo */}
         <View style={styles.loginIconContainer}>
-            <Ionicons name="arrow-back-outline" size={30} color="black" style={{marginBottom:90, marginLeft:15}} onPress={() => router.back()}/>
-            <Image source={require('../../assets/images/login.png')} style={styles.loginIcon}/>
+          <Ionicons 
+            name="arrow-back-outline" 
+            size={30} 
+            color="black" 
+            style={{ marginBottom: 90, marginLeft: 15 }} 
+            onPress={() => router.back()} 
+          />
+          <Image source={require('../../assets/images/login.png')} style={styles.loginIcon} />
         </View>
-        <View style={styles.container}>
 
-          <View >
+        <View style={styles.container}>
+          {/* Titre de la page */}
+          <View>
             <Text style={styles.labelText}>Reset password</Text>
           </View>
+
           <View style={styles.inputContainer}>
-          <PasswordSignUp
+            {/* Composant PasswordSignUp : champ mot de passe avec validation */}
+            <PasswordSignUp
               password={password}
               setPassword={setPassword}
               showPassword={showPassword}
-              setShowPassword={setShowPassword} 
+              setShowPassword={setShowPassword}
               criteria={criteria}
-              strength={strength}/>
-          <View>
-            <Text style={styles.inputText}>Confirm Password</Text>
-            <TextInput
-              style={styles.input}
-              secureTextEntry={showPassword}
-              value={confirmPassword}
-              onChangeText={(text) => {
-                const noSpaces = text.replace(/\s/g, '');
-                setConfirmPassword(noSpaces);
-              }}/>
+              strength={strength}
+            />
+
+            {/* Champ confirmation mot de passe */}
+            <View>
+              <Text style={styles.inputText}>Confirm Password</Text>
+              <TextInput
+                style={styles.input}
+                secureTextEntry={showPassword} // masque ou affiche le texte
+                value={confirmPassword}
+                onChangeText={(text) => {
+                  // Supprime les espaces au cas où
+                  const noSpaces = text.replace(/\s/g, '');
+                  setConfirmPassword(noSpaces);
+                }}
+              />
+            </View>
           </View>
-          </View>
+
+          {/* Bouton de soumission */}
           <View style={styles.bottom}>
-            <TouchableOpacity style={styles.submitButton}>
+            <TouchableOpacity style={styles.submitButton} onPress={() => {
+              // Ici tu peux ajouter la logique de validation et envoi du nouveau mot de passe
+              console.log('Submit new password:', password, confirmPassword);
+            }}>
               <Text style={styles.submitText}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
-    </Pressable >
+    </Pressable>
   );
 }
+
 
 const styles = StyleSheet.create({
   root: {
