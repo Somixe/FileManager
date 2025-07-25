@@ -185,7 +185,7 @@ export default function SignUp() {
             source={require('../../assets/images/login.png')} 
             style={styles.loginIcon}
           />
-          {showConfetti && <Confetti style={{ transform: [{ rotate: '30deg' }], alignSelf: 'flex-end' }} />}
+          {showConfetti && <Confetti />}
         </View>
         <View style={styles.container}>
           
@@ -290,8 +290,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#EACCA7',
   },
   iconContainer: {
+    flexDirection:'row',
     alignItems:'center',
-    justifyContent:'center',
+    justifyContent:'start',
     height:145,
     marginTop:60,
   },
@@ -300,6 +301,7 @@ const styles = StyleSheet.create({
     height: 105,
     position:'absolute',
     zIndex:1,
+    left:150,
   },
   container: {
     flex:1,

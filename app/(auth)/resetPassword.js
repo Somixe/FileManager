@@ -87,7 +87,7 @@ export default function ResetPassword() {
       Toast.show({
         type: 'errorMessage',
         text1: 'Choose a stronger password',
-        visibilityTime: 3000,
+        visibilityTime: 3200,
       });
       return;
     }
@@ -96,7 +96,7 @@ export default function ResetPassword() {
       Toast.show({
         type: 'errorMessage',
         text1: 'Passwords don\' t match',
-        visibilityTime: 3000,
+        visibilityTime: 2500,
       });
       return;
     }
