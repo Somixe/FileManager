@@ -1,3 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+
+
 const PasswordLogin = ({ password, setPassword, showPassword, setShowPassword }) => {
   return (
     <View style={styles.container}>
@@ -29,7 +33,7 @@ const PasswordLogin = ({ password, setPassword, showPassword, setShowPassword })
             // Enlève les espaces du texte saisi avant de le stocker
             const noSpaces = text.replace(/\s/g, '');
             setPassword(noSpaces);
-          }}
+      }}
         />
       </View>
     </View>

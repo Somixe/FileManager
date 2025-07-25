@@ -4,24 +4,48 @@ import {
   Image,
   Keyboard,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
+import Toast from 'react-native-toast-message';
+import Confetti from '../../components/animation/confetti';
 import PasswordSignUp from '../../components/password/PasswordSignUp'; // Champ mot de passe avec force visuelle
-import { shadowStyle } from '../../components/shadow';
+import { shadowStyle } from '../../components/shadow/shadow';
+
 
 export default function SignUp() {
   const router = useRouter();
 
   // États pour les champs du formulaire
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [refresh, setRefresh] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false); //Contrôle l'affichage des confettis
+
+
+  /* Rafraîchit le formulaire */
+  const refreshPage = () => {
+
+      setRefresh(true) //active le chargement
+
+      setTimeout(() => {
+        setRefresh(false);
+        setName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+        setShowPassword(false);
+      }, 600);
+  }
 
   /**
    * Vérifie les critères de robustesse du mot de passe
@@ -56,20 +80,113 @@ export default function SignUp() {
 
   const criteria = checkPasswordCriteria(password);
   const strength = getStrength(criteria);
+  
+  const checkNameOnSubmit = () => {
+    if (name === '') {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter your full name',
+        visibilityTime: 3000,
+      });
+      return false;
+    }
+    return true
+  }
+
+  const checkEmailOnSubmit = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email) {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter your email address',
+        visibilityTime: 3000,
+      });
+      return false;
+    } 
+
+    if (!emailRegex.test(email)) {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter a valid email address',
+        visibilityTime: 3000,
+      });
+      return false;
+    }
+
+    //* A METTRE SI IL EXISTE DEJA UN MAIL DANS LA BDD */
+    return true;     
+  };
+
+  const checkPwdOnSubmit = () => {
+  
+    if (password === '') {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter your password',
+        visibilityTime: 3000,
+      });
+      return false;
+    } 
+
+    if (password !== confirmPassword) {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Passwords don\' t match',
+        visibilityTime: 3000,
+      });
+      return false;
+    }
+
+    if (strength < 0.65){
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Choose a stronger password',
+        visibilityTime: 3000,
+      });
+      return false;
+    };
+
+    return true;
+  };
+
+  const checkValidAccount = () => {
+    const isValidEmail = checkEmailOnSubmit();
+    const isValidPwd = checkPwdOnSubmit();
+    const isValidName = checkNameOnSubmit();
+
+    if (isValidEmail && isValidPwd && isValidName) {
+      setShowConfetti(true); // Affiche les confettis
+
+      Toast.show({
+        type: 'validMessage',
+        text1: 'Account created successfully!',
+        visibilityTime: 2000,
+      });
+
+      setTimeout(() => {
+        setShowConfetti(false); 
+        Toast.hide(); // Cache manuellement le toast si tu veux
+      }, 1800);
+    }
+  };
+
 
   return (
     // Permet de fermer le clavier en appuyant en dehors des champs
     <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <ScrollView style={styles.root}>
+      {/* Defilement de la page + rafraîchissement avec 'refreshControl. refresh = cacher/montrer le spinner et onRefresh = fonction appelé progressViewOffset = déplace le spinner vers le bas*/}
+      <ScrollView style={styles.root} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshPage} progressViewOffset={40}/>}>
         
         {/* Logo en haut de l'écran */}
         <View style={styles.iconContainer}>
+          {showConfetti && <Confetti style={{ transform: [{ rotate: '15deg' }], alignSelf: 'flex-start' }} />}
           <Image 
             source={require('../../assets/images/login.png')} 
             style={styles.loginIcon}
           />
+          {showConfetti && <Confetti style={{ transform: [{ rotate: '30deg' }], alignSelf: 'flex-end' }} />}
         </View>
-
         <View style={styles.container}>
           
           {/* Titre de la page */}
@@ -82,6 +199,8 @@ export default function SignUp() {
               <Text style={styles.inputText}>Full Name</Text>
               <TextInput
                 style={styles.input}
+                value={name}
+                onChangeText={setName}
                 autoCorrect={false} // Désactive la correction automatique
                 spellCheck={false} // Désactive la vérification orthographique (les vagues rouges)
               />
@@ -92,6 +211,8 @@ export default function SignUp() {
               <Text style={styles.inputText}>Email</Text>
               <TextInput
                 style={styles.input}
+                value={email}
+                onChangeText={(text) => setEmail(text.toLowerCase())}
                 keyboardType="email-address" 
                 autoCorrect={false}
                 spellCheck={false}
@@ -115,6 +236,7 @@ export default function SignUp() {
                 style={styles.input}
                 secureTextEntry={showPassword}
                 value={confirmPassword}
+                autoComplete="off"
                 onChangeText={(text) => { //Enlève la possibilité d'ajouter des espaces
                   const noSpaces = text.replace(/\s/g, '');
                   setConfirmPassword(noSpaces);
@@ -130,7 +252,7 @@ export default function SignUp() {
             {/* Bouton de validation (non relié encore à une logique) */}
             <TouchableOpacity 
               style={styles.signUpButton} 
-              onPress={() => console.log('Confirm Sign up!')}
+              onPress={checkValidAccount}
             >
               <Text style={styles.signUpText}>Confirm</Text>
             </TouchableOpacity>
@@ -140,7 +262,6 @@ export default function SignUp() {
             {/* Connexion via Google */}
             <TouchableOpacity 
               style={styles.googleButton} 
-              onPress={() => console.log('Login with Google')}
             >
               <Image
                 source={require('../../assets/images/logoGoogle.png')}
@@ -151,7 +272,7 @@ export default function SignUp() {
             {/* Lien vers la page de connexion */}
             <View style={styles.loginContainer}>
               <Text style={styles.questionText}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => router.replace('./login')}>
+              <TouchableOpacity onPress={() => {router.replace('./login'); Toast.hide()}}>
                 <Text style={styles.loginText}>Log in</Text>
               </TouchableOpacity>
             </View>
@@ -177,6 +298,8 @@ const styles = StyleSheet.create({
   loginIcon: {
     width: 108,
     height: 105,
+    position:'absolute',
+    zIndex:1,
   },
   container: {
     flex:1,

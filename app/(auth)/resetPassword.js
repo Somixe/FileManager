@@ -5,6 +5,7 @@ import {
   Image,
   Keyboard,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,8 +13,10 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import Toast from 'react-native-toast-message';
+import Confetti from '../../components/animation/confetti';
 import PasswordSignUp from '../../components/password/PasswordSignUp';
-import { shadowStyle } from '../../components/shadow';
+import { shadowStyle } from '../../components/shadow/shadow';
 
 export default function ResetPassword() {
   // Hook pour gérer la navigation entre les pages
@@ -23,6 +26,20 @@ export default function ResetPassword() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true); // Contrôle l'affichage du mot de passe (masqué ou visible)
+  const [refresh, setRefresh] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false); //Contrôle l'affichage des confettis
+
+  /* Rafraîchit le formulaire */
+  const refreshPage = () => {
+
+      setRefresh(true) //active le chargement
+
+      setTimeout(() => {
+        setRefresh(false);
+        setPassword('');
+        setConfirmPassword('');
+      }, 600);
+  }
   
   // Fonction qui vérifie les critères de sécurité du mot de passe
   const checkPasswordCriteria = (pwd) => {
@@ -54,19 +71,67 @@ export default function ResetPassword() {
   const criteria = checkPasswordCriteria(password);
   const strength = getStrength(criteria);
 
+  //Vérifie la validité de l'e-mail au moment de la soumission
+  const checkPwdOnSubmit = () => {
+
+    if (password === '') {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter your password',
+        visibilityTime: 3000,
+      });
+      return;
+    } 
+    
+    if (strength < 0.65){
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Choose a stronger password',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Passwords don\' t match',
+        visibilityTime: 3000,
+      });
+      return;
+    }
+
+    Toast.show({
+      type: 'validMessage',
+      text1: 'Password updated successfully!',
+      visibilityTime: 2000,
+    });
+
+    setShowConfetti(true);
+
+    setTimeout(()=>{
+      setShowConfetti(false);
+      Toast.hide()}, 1850);
+
+
+    return 
+  };
+
   return (
     <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <ScrollView scrollEventThrottle={16} style={styles.root}>
+      <ScrollView scrollEventThrottle={16} style={styles.root} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshPage} progressViewOffset={40}/>}>
         {/* Icone de retour + logo */}
         <View style={styles.loginIconContainer}>
+          {showConfetti && <Confetti style={{ transform: [{ rotate: '15deg' }], alignSelf:'flex-start' }} />}
           <Ionicons 
             name="arrow-back-outline" 
             size={30} 
             color="black" 
-            style={{ marginBottom: 90, marginLeft: 15 }} 
-            onPress={() => router.back()} 
+            style={{ position: 'absolute', marginBottom: 90, marginLeft: 15, zIndex:1 }} 
+            onPress={() => {router.back(); Toast.hide()}} 
           />
           <Image source={require('../../assets/images/login.png')} style={styles.loginIcon} />
+          {showConfetti && <Confetti style={{ transform: [{ rotate: '30deg' }], alignSelf:'flex-end'}} />}
         </View>
 
         <View style={styles.container}>
@@ -104,10 +169,8 @@ export default function ResetPassword() {
 
           {/* Bouton de soumission */}
           <View style={styles.bottom}>
-            <TouchableOpacity style={styles.submitButton} onPress={() => {
-              // Ici tu peux ajouter la logique de validation et envoi du nouveau mot de passe
-              console.log('Submit new password:', password, confirmPassword);
-            }}>
+            <TouchableOpacity style={styles.submitButton} onPress={()=>{
+            checkPwdOnSubmit();}}>
               <Text style={styles.submitText}>Submit</Text>
             </TouchableOpacity>
           </View>
@@ -127,7 +190,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'start',
-    gap:90,
     height:145,
     marginTop:60,
   },
@@ -135,6 +197,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 143,
     marginTop:70,
+    position:'absolute',
+    zIndex:1,
+    left:130,
   },
   container: {
     flex:1,

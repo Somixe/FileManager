@@ -5,19 +5,32 @@ import {
   Image,
   Keyboard,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
-import { shadowStyle } from '../../components/shadow'; // Style de shadow personnalisé
+import { shadowStyle } from '../../components/shadow/shadow'; // Style de shadow personnalisé
 
 // Composant pour la saisie du code de vérification (OTP)
 export default function codeForgotPassword() {
   const router = useRouter();
   const { email } = useLocalSearchParams(); // Récupère l'e-mail envoyé en paramètre
+  const [refresh, setRefresh] = useState(false);
+
+  /* Rafraîchit le formulaire */
+  const refreshPage = () => {
+
+      setRefresh(true) //active le chargement
+
+      setTimeout(() => {
+        setRefresh(false);
+        /* A REINITIALISER LE CODE */
+      }, 600);
+  }
 
   // State contenant les 6 chiffres du code OTP
   const [code, setCode] = useState(['', '', '', '', '', '']);
@@ -47,7 +60,7 @@ export default function codeForgotPassword() {
   return (
     // Ferme le clavier lorsqu'on clique en dehors
     <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <ScrollView scrollEventThrottle={16} style={styles.root}>
+      <ScrollView scrollEventThrottle={16} style={styles.root} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshPage} progressViewOffset={40}/>}>
         
         {/* Icône de retour et logo */}
         <View style={styles.loginIconContainer}>
@@ -97,6 +110,7 @@ export default function codeForgotPassword() {
                 keyboardType="numeric"
                 style={styles.otpInput}
                 returnKeyType="next"
+                maxLength={1}
                 autoFocus={false}
                 onKeyPress={({ nativeEvent }) => {
                   if (nativeEvent.key === 'Backspace') {

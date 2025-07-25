@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Tooltip } from 'react-native-elements';
 
 // Composant qui affiche une icône info, et au clic affiche un tooltip avec les critères de mot de passe
@@ -39,7 +39,7 @@ export default function PasswordInfo({ criteria }) {
 }
 
 // Styles pour afficher les critères en vert si validés, bleu foncé sinon
-const styles = {
+const styles = StyleSheet.create({
   valid: { color: 'green' },
   invalid: { color: '#274a65ff' },
-};
+});

@@ -37,6 +37,8 @@ const PasswordSignUp = ({ password, setPassword, showPassword, setShowPassword, 
             const noSpaces = text.replace(/\s/g, ''); // On retire les espaces dans la saisie
             setPassword(noSpaces);                     // Mise à jour de l'état password
           }}
+          //Empêche les appareils ios de nous proposer un mdp
+          textContentType='oneTimeCode'
         />
         
         {/* Barre indiquant visuellement la force du mot de passe */}
