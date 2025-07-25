@@ -4,7 +4,7 @@ import {
   ScrollView,
   StyleSheet, Text, TouchableOpacity, View
 } from 'react-native';
-import { shadowStyle } from '../../components/shadow'; // Style d'ombre réutilisable
+import { shadowStyle } from '../../components/shadow/shadow'; // Style d'ombre réutilisable
 
 export default function IndexScreen() {
   const router = useRouter();

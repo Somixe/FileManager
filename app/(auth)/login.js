@@ -4,27 +4,42 @@ import {
   Image,
   Keyboard,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 import PasswordLogin from '../../components/password/PasswordLogin'; // Champ mot de passe customisé
-import { shadowStyle } from '../../components/shadow';
+import { shadowStyle } from '../../components/shadow/shadow';
 
-export default function Login() {
+export default function login() {
   const router = useRouter();
 
   // État local pour le mot de passe et sa visibilité
+  const [Email,setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(true);
+  const [refresh,setRefresh] = useState(false);
+
+    /* Rafraîchit le formulaire */
+  const refreshPage = () => {
+
+      setRefresh(true) //active le chargement
+
+      setTimeout(() => {
+        setRefresh(false);
+        setEmail('');
+        setPassword('');
+      }, 600);
+  }
 
   return (
     // Pressable pour fermer le clavier lorsqu'on touche hors des champs
     <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <ScrollView scrollEventThrottle={16} style={styles.root}>
+      <ScrollView scrollEventThrottle={16} style={styles.root} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshPage} progressViewOffset={40}/>}>
 
         {/* Icône de l'écran de connexion */}
         <View style={styles.iconContainer}>
@@ -49,6 +64,8 @@ export default function Login() {
               <Text style={styles.inputText}>Email</Text>
               <TextInput
                 style={styles.input}
+                value={Email}
+                onChangeText={(text) => setEmail(text.toLowerCase())}
                 keyboardType="email-address"
                 autoCorrect={false} // Désactive la correction automatique
                 spellCheck={false} // Désactive la vérification orthographique (les vagues rouges)
@@ -113,7 +130,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: '#EACCA7',
   },
   iconContainer: {

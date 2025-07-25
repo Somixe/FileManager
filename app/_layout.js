@@ -4,7 +4,8 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import Toast from 'react-native-toast-message';
+import toastConfig from '../components/toast/toastConfig';
 
 export default function RootLayout() {
   // Chargement des polices personnalisées (bloque le rendu tant qu'elles ne sont pas prêtes)
@@ -24,6 +25,7 @@ export default function RootLayout() {
       <Stack>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack>
+      <Toast config={toastConfig}/>
     </>
   );
 }

@@ -5,6 +5,7 @@ import {
   Image,
   Keyboard,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,32 +13,48 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import { shadowStyle } from '../../components/shadow'; // Styles d'ombre personnalisés
+import Toast from 'react-native-toast-message';
+import { shadowStyle } from '../../components/shadow/shadow'; // Styles d'ombre personnalisés
+
 
 export default function forgotPassword() {
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [refresh,setRefresh] = useState(false);
 
-  /**
-   * Vérifie la validité de l'e-mail au moment de la soumission
-   * - Vérifie que le champ n'est pas vide
-   * - Vérifie que l'e-mail respecte un format classique
-   * - (À ajouter : vérifier que l'e-mail existe dans la base de données)
-   */
+  /* Rafraîchit le formulaire */
+  const refreshPage = () => {
+
+      setRefresh(true) //active le chargement
+
+      setTimeout(() => {
+        setRefresh(false);
+        setEmail('');
+      }, 600);
+  }
+
+  {/*Vérifie la validité de l'e-mail au moment de la soumission*/}
   const checkEmailOnSubmit = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    /* À activer en prod :
     if (!email) {
-      alert('Email is required');
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter your email address',
+        visibilityTime: 3000,
+      });
+      return;
+    } 
+
+    if (!emailRegex.test(email)) {
+      Toast.show({
+        type: 'errorMessage',
+        text1: 'Please enter a valid email address',
+        visibilityTime: 3000,
+      });
       return;
     }
 
-    if (!emailRegex.test(email)) {
-      alert('Invalid Email');
-      return;
-    }
-    */
 
     // TODO : Ajouter une vérification côté backend pour s'assurer que l'e-mail existe
 
@@ -46,12 +63,13 @@ export default function forgotPassword() {
       pathname: 'codeForgotPassword',
       params: { email: email },
     });
+    
   };
 
   return (
     // Ferme le clavier lorsqu'on appuie en dehors des champs
     <Pressable onPress={Keyboard.dismiss} style={{ flex: 1 }}>
-      <ScrollView scrollEventThrottle={16} style={styles.root}>
+      <ScrollView scrollEventThrottle={16} style={styles.root} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshPage} progressViewOffset={40}/>}>
 
         {/* Logo + flèche de retour */}
         <View style={styles.loginIconContainer}>
@@ -60,7 +78,7 @@ export default function forgotPassword() {
             size={30}
             color="black"
             style={{ marginBottom: 90, marginLeft: 15 }}
-            onPress={() => router.back()}
+            onPress={() => {Toast.hide(); router.back()}}
           />
           <Image 
             source={require('../../assets/images/login.png')} 
@@ -95,7 +113,7 @@ export default function forgotPassword() {
                 autoCorrect={false}
                 spellCheck={false}
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => setEmail(text.toLowerCase())}
               />
             </View>
           </View>
@@ -126,7 +144,6 @@ const styles = StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     justifyContent:'start',
-    gap:90,
     height:145,
     marginTop:60,
   },
