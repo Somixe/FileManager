@@ -1,0 +1,58 @@
+--- EXPLICATIONS SIMPLES POUR UN PROJET BACKEND / FRONTEND ---
+
+1. Fichier .env
+----------------
+- Contient des variables d'environnement (ex : mots de passe, clés API, liens vers la base de données).
+- Permet de ne pas écrire ces informations sensibles directement dans le code.
+- Doit être ajouté dans .gitignore pour ne pas être poussé sur GitHub (sécurité).
+
+2. Fichier .gitignore
+---------------------
+- Liste des fichiers/dossiers que Git doit ignorer.
+- Utile pour ne pas versionner les fichiers sensibles (ex: .env), temporaires (ex: env/), ou générés (ex: logs).
+- Exemple : 
+
+.env
+env/
+FileManager.git.bfg-report/
+
+
+3. Dossier env/
+---------------
+- Contient souvent un environnement virtuel Python ou Node.
+- Ne doit jamais être versionné car il est spécifique à ta machine.
+- Doit être listé dans .gitignore.
+
+4. Pourquoi utiliser un serveur backend ?
+-----------------------------------------
+- Le backend sert à gérer la logique métier, base de données, authentification, etc.
+- Le serveur écoute les requêtes du frontend (navigateur/app) et renvoie des données.
+- Permet de sécuriser les données et opérations (ex : login, stockage fichiers).
+- Exemples populaires : Express.js (Node.js), Flask (Python), Django (Python).
+
+5. Comment lier backend et frontend ?
+--------------------------------------
+- Le frontend (React, Vue, Angular ou simple HTML/JS) fait des requêtes HTTP (ex: GET, POST) vers le backend via des **routes API**.
+- Exemple route backend : `/api/login` qui reçoit un login/mot de passe.
+- Le backend traite la requête, vérifie en base, renvoie une réponse (ex: succès ou erreur).
+- Le frontend affiche les résultats en fonction.
+
+6. Liens essentiels backend
+---------------------------
+- `server.js` (ou app.js) : point d'entrée du serveur Node.
+- Routes : définissent les chemins accessibles (ex: `/login`, `/users`).
+- Contrôleurs : fonction qui traite la logique métier derrière une route.
+- Base de données : connectée via une URL (ex: MongoDB Atlas).
+- .env : contient URL base de données et autres secrets.
+
+---
+
+Résumé ultra simple :
+1. Crée un serveur backend avec des routes.
+2. Stocke secrets dans .env (non poussé sur Git).  //ce qu'on a fait au debut sans le savoir
+3. Frontend envoie requêtes au backend.
+4. Backend répond avec données ou confirmation.
+5. Utilise .gitignore pour protéger fichiers sensibles.
+
+---
+
