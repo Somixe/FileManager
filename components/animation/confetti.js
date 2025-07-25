@@ -7,7 +7,7 @@ export default function Confetti({style}) {
       <LottieView
         source={require('../../assets/animations/confetti.json')}
         autoPlay
-        loop={true}
+        loop={false}
         style={{ width: 200, height: 200}}
       />
     </View>

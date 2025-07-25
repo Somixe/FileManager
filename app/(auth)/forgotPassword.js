@@ -151,6 +151,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 143,
     marginTop:70,
+    position:'absolute',
+    zIndex:1,
+    left:130,
   },
   container: {
     flex:1,
